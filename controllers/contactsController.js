@@ -5,7 +5,7 @@ import { HttpError } from '../helpers/HttpError.js'
 const getAll = async (req, res, next) => {
     try {
         const { _id: owner } = req.user;
-        const { page = 1, limit = 10, ...filterParams } = req.query;
+        const { page = 1, limit = 20, ...filterParams } = req.query;
         const skip = (page - 1) * limit;
         const filter = { owner, ...filterParams };
         const data = await Contact.find(filter, "-createdAt -updatedAt", { skip, limit }).populate("owner", "username email");
