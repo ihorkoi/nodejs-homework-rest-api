@@ -1,5 +1,4 @@
 import { Contact } from '../models/Contact.js'
-import { addContactSchema, addToFavoriteSchema, updateContactSchema } from '../schemas/contactsSchemas.js'
 import { HttpError } from '../helpers/HttpError.js'
 
 const getAll = async (req, res, next) => {
@@ -9,7 +8,9 @@ const getAll = async (req, res, next) => {
         const skip = (page - 1) * limit;
         const filter = { owner, ...filterParams };
         const data = await Contact.find(filter, "-createdAt -updatedAt", { skip, limit }).populate("owner", "username email");
-        res.json(data)
+        const total = await Contact.countDocuments(filter);
+
+        res.json({data, total})
     } catch (error) {
         next(error)
     }
@@ -19,7 +20,7 @@ const getById = async (req, res, next) => {
     try {
         const { _id: owner } = req.user;
         const { contactId } = req.params
-        const data = await Contact.findById({ _id: contactId, owner })
+        const data = await Contact.findOne({ _id: contactId, owner })
         if (!data) {
             throw HttpError(404, 'Contact not found');
         }
@@ -45,7 +46,7 @@ const removeContact = async (req, res, next) => {
     try {
         const { _id: owner } = req.user;
         const { contactId } = req.params
-        const data = await Contact.findByIdAndDelete({ _id: contactId, owner })
+        const data = await Contact.findOneAndDelete({ _id: contactId, owner })
         if (!data) {
             throw HttpError(404, 'Contact not found');
         }
@@ -59,7 +60,7 @@ const updateContact = async (req, res, next) => {
     try {
         const { _id: owner } = req.user;
         const { contactId } = req.params
-        const data = await Contact.findByIdAndUpdate({ _id: contactId, owner }, req.body)
+        const data = await Contact.findOneAndUpdate({ _id: contactId, owner }, req.body)
         if (!data) {
             throw HttpError(404, 'Contact not found');
         }
