@@ -1,21 +1,25 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model } from "mongoose";
 
-export const userSchema = new Schema({
+export const userSchema = new Schema(
+  {
     password: {
-        type: String,
-        required: [true, 'Set password for user'],
+      type: String,
+      required: [true, "Set password for user"],
     },
     email: {
-        type: String,
-        required: [true, 'Email is required'],
-        unique: true,
+      type: String,
+      required: [true, "Email is required"],
+      unique: true,
     },
     subscription: {
-        type: String,
-        enum: ["starter", "pro", "business"],
-        default: "starter"
+      type: String,
+      enum: ["starter", "pro", "business"],
+      default: "starter",
     },
-    token: String
-}, { versionKey: false, timestamps: true })
+    avatarURL: String,
+    token: String,
+  },
+  { versionKey: false, timestamps: true }
+);
 
-export const User = model('user', userSchema)
+export const User = model("user", userSchema);

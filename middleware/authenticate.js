@@ -21,7 +21,6 @@ export const authenticate = async (req, res, next) => {
         }
 
         const user = await User.findById(id)
-
         if (!user || !user.token || user.token !== token) {
             throw HttpError(404, "Not authorized")
         }

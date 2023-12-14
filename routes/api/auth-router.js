@@ -3,6 +3,8 @@ import validateBody from '../../decorators/validateBody.js'
 import { signUpSchema } from "../../schemas/authSchema.js";
 import authController from "../../controllers/authController.js";
 import { authenticate } from "../../middleware/authenticate.js";
+import { upload } from '../../middleware/upload.js'
+
 
 const authRouter = express.Router()
 
@@ -16,5 +18,6 @@ authRouter.post("/logout", authenticate, authController.logOut);
 
 authRouter.patch("/", authenticate, authController.subscriptionUpdate);
 
+authRouter.patch('/avatars',  authenticate, upload.single('avatar'), authController.avatarUpdate)
 
 export default authRouter
