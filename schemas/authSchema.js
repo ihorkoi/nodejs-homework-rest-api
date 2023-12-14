@@ -5,3 +5,7 @@ export const signUpSchema = Joi.object({
     password: Joi.string().required()
 
 })
+
+export const resendEmailSchema = Joi.object({
+    email: Joi.string().email().required(),
+})
